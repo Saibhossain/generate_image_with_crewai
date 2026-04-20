@@ -1,3 +1,5 @@
 langtrace-python-sdk
 crewai 
 litellm
+google-generativeai
+crewai[google-genai]
