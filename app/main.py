@@ -5,7 +5,7 @@ load_dotenv()
 from langtrace_python_sdk import langtrace
 langtrace.init(api_key=os.getenv("LANGTRACE_API_KEY"))
 
-from app.crews.crew_builder import build_crew
+from crews.crew_builder import build_crew
 
 
 

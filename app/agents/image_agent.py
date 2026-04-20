@@ -1,13 +1,13 @@
 from crewai import Agent
 from app.llm.config import get_llm
-from app.tools.image_tools import generate_image
+from app.tools.image_tools import ImageGenerationTool
 
-def create_image_agent(prompt):
+def create_image_agent():
     return Agent(
         role="Image Generator",
         goal="Generate images from optimized prompts",
         backstory="AI artist specialized in generating high-quality visuals",
-        tools=[generate_image],
+        tools=[ImageGenerationTool()],
         llm=get_llm("openai"),
         verbose=True
     )
