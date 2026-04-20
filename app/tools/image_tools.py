@@ -1,52 +1,40 @@
-import os 
-import PIL.Image
+import os
+import base64
 from openai import OpenAI
-from io import BytesIO
-from google import genai
-from google.genai import types
 from dotenv import load_dotenv
 load_dotenv()
 
-import requests
-import os
 
-def generate_image(prompt: str, model: str = "openai"):
-    api_key = os.getenv("AICC_API_KEY")
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-    headers = {
-        "Authorization": f"Bearer {api_key}",
-        "Content-Type": "application/json"
-    }
+def generate_image(prompt: str):
+    response = client.images.generate(
+        model="gpt-image-1-mini",
+        prompt=prompt,
+        size="1024x1024"
+    )
+    
+    image_base64 = response.data[0].b64_json
+    
+    if not image_base64:
+        return "No image generated"
+    
+    # Create folder
+    os.makedirs("images", exist_ok=True)
 
-    if model == "openai":
-        response = requests.post(
-            "https://api.ai.cc/v1/images/generations",
-            headers=headers,
-            json={
-                "model": "gpt-image-1",
-                "prompt": prompt,
-                "size": "1024x1024"
-            }
-        )
+    # Auto-increment filename
+    existing_files = os.listdir("images")
+    image_count = len(existing_files) + 1
 
-        response.raise_for_status()
-        return response.json()["data"][0]["url"]
+    file_path = f"images/generated_image_{image_count}.png"
 
-    elif model == "gemini":
-        response = requests.post(
-            "/v1beta/models/gemini-3.1-flash-image-preview:generateContent",
-            headers=headers,
-            json={
-                "model": "gemini-3.1-flash-image-preview",
-                "prompt": prompt
-            }
-        )
+    # Download image from URL
+    with open(file_path, "wb") as f:
+        f.write(base64.b64decode(image_base64))
 
-        response.raise_for_status()
-        return response.json()
+    return file_path
 
-    else:
-        raise ValueError("Model must be 'openai' or 'gemini'")
 
-            
-generate_image("A futuristic city at sunset.", "gemini")
+# test image tools 
+       
+# print(generate_image("A futuristic city at sunset"))

@@ -6,6 +6,6 @@ def create_critic_agent():
         role="Critic",
         goal="Evaluate and improve prompt and image quality",
         backstory="Expert in visual critique and AI-generated content evaluation",
-        llm=get_llm(),
+        llm=get_llm("openai"),
         verbose=True
     )

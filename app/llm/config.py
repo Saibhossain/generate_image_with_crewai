@@ -4,7 +4,7 @@ from crewai import LLM
 from dotenv import load_dotenv
 load_dotenv()
 
-def get_llm(provider="gemini"):
+def get_llm(provider="openai"):
     if provider == "gemini":
         return LLM(
             model = "gemini/gemini-2.5-flash-lite",
