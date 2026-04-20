@@ -1,1 +1,3 @@
 langtrace-python-sdk
+crewai 
+litellm
